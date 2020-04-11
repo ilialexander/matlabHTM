@@ -1,4 +1,4 @@
-function main  (inFile, outFile, displayFlag, learnFlag, learntDataFile)
+function main  (inFile, outFile, displayFlag, learnFlag, learntDataFile, trn_trials, trn_mult)
 % This is the main function that (i) sets up the parameters, (ii)
 % initializes the spatial pooler, and (iii) iterates through the data and
 % feed it through the spatial pooler and temporal memory modules.
@@ -38,27 +38,29 @@ if learnFlag
     %% Learning mode for Spatial Pooler
     % We train the spatial pooler in a separate step from sequence memory
     fprintf(1, '\n Learning sparse distributed representations using spatial pooling...');
-    trN = min (750, round(0.15*data.N)); 
-    % use the first 15 percent of the data (upto a maximum of 750) samples for training the spatial pooler. 
-    for iteration = 1:trN
-        x = []; % construct the binary vector x for each measurement from the data fields
-        for  i=1:length(data.fields)
-            j = data.fields(i);
-            x = [x data.code{j}(data.value{j}(iteration),:)];
+    trN = (trn_mult+5)*100; 
+    % use the first 15 percent of the data (upto a maximum of 750) samples for training the spatial pooler.
+    for jteration = 1:(5*trn_trials)
+        for iteration = 1:trN
+            x = []; % construct the binary vector x for each measurement from the data fields
+            for  i=1:length(data.fields)
+                j = data.fields(i);
+                x = [x data.code{j}(data.value{j}(iteration),:)];
+            end
+
+            % train the spatialPooler
+            xSM = spatialPooler (x, true, false);
+
+            %Can we reconstruct the input by inverting the process? This is
+            %just for sanity check. It is NOT used for training the spatial
+            %pooler
+            ri = (xSM* double(SP.synapse > SP.connectPerm)) > 1;
+            rError = nnz(x(1:data.nBits(1))) - nnz(ri(1:data.nBits(1)) & x(1:data.nBits(1)));
+            if (rError ~= 0)
+                fprintf(1, '\n (Non zero reconstruction error: %d bits) - ignore.', rError);
+            end
+
         end
-        
-        % train the spatialPooler
-        xSM = spatialPooler (x, true, false);
-        
-        %Can we reconstruct the input by inverting the process? This is
-        %just for sanity check. It is NOT used for training the spatial
-        %pooler
-        ri = (xSM* double(SP.synapse > SP.connectPerm)) > 1;
-        rError = nnz(x(1:data.nBits(1))) - nnz(ri(1:data.nBits(1)) & x(1:data.nBits(1)));
-        if (rError ~= 0)
-            fprintf(1, '\n (Non zero reconstruction error: %d bits) - ignore.', rError);
-        end
-    
     end
     fprintf(1, '\n Learning sparse distributed representations using spatial pooling...done.');
 

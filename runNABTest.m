@@ -1,7 +1,9 @@
-startFile = 1;
-endFile = 1;
+startFile = 80;
+endFile = 80;
 displayFlag = false;
 createModelFlag = true;
+trn_trials = 10;
+trn_mult = 10;
 % This function through the entore NAB dataset
 %
 % Copyright (c) 2016,  Sudeep Sarkar, University of South Florida, Tampa, USA
@@ -32,7 +34,7 @@ for i=startFile:endFile
 
     %% Create Model
     if createModelFlag
-        main  (file_name, name, displayFlag, true, 'none');
+        main  (file_name, name, displayFlag, true, 'none', trn_trials, trn_mult);
     end
 
     %% Read saved run data --

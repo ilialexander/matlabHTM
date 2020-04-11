@@ -1,4 +1,4 @@
-function runNAB (startFile, endFile, displayFlag, createModelFlag)
+function runNAB (startFile, endFile, displayFlag, createModelFlag, trn_trials, trn_mult)
 % This function through the entore NAB dataset
 %
 % Copyright (c) 2016,  Sudeep Sarkar, University of South Florida, Tampa, USA
@@ -29,7 +29,7 @@ for i=startFile:endFile
 
     %% Create Model
     if createModelFlag
-        main  (file_name, name, displayFlag, true, 'none');
+        main  (file_name, name, displayFlag, true, 'none', trn_trials, trn_mult);
     end
 
     matlabHTM_timing_dataset = toc;
