@@ -13,7 +13,7 @@ createModelFlag = true;
 %
 close all;
 if displayFlag
-    figure; h1 = gcf; 
+    figure; h1 = gcf;
 end
 
 %% Sequences are being done in parallel now

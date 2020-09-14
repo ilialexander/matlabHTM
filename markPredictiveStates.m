@@ -47,6 +47,8 @@ SM.dendriteLearn (:) = 0;
 
 x = SM.cellActive(cellID) > 0;
 synapseInput = synapse(x);
+SM.amount_active_synapses = [SM.amount_active_synapses, size(x,1)]; % records amount of active synapses
+
 
 xL = SM.cellLearn(cellID) > 0;
 synapseInputL = synapse(xL);

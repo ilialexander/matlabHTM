@@ -85,6 +85,7 @@ predictions = zeros(3, data.N); % initialize array allocaton -- faster on matlab
 SM.inputPrevious = zeros(SM.N, 1);
 data.inputCodes = [];
 data.inputSDR = [];
+SM.amount_active_synapses = [];
 SP.boost = ones (SM.N, 1); 
 % no boosting in spatial pooler as it is being run in a non-learning mode
 % next. 
